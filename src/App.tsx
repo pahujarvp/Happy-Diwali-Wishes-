@@ -28,19 +28,9 @@ export default function App() {
   });
 
   useEffect(() => {
-    // Start background mp3 music by default
+    // Start background devotional mp3 music unmuted by default
     audioStore.initAudio();
-    setIsMuted(audioStore.muted);
-
-    // If browser policy deferred audio until user gesture, update mute status upon first gesture
-    const handleInitialGesture = () => {
-      setTimeout(() => {
-        setIsMuted(audioStore.muted);
-      }, 100);
-    };
-
-    window.addEventListener('pointerdown', handleInitialGesture, { once: true });
-    window.addEventListener('click', handleInitialGesture, { once: true });
+    setIsMuted(false);
 
     if (!valleyRef.current) return;
 
@@ -58,8 +48,6 @@ export default function App() {
     valleyInstanceRef.current = valley;
 
     return () => {
-      window.removeEventListener('pointerdown', handleInitialGesture);
-      window.removeEventListener('click', handleInitialGesture);
       valley.dispose();
       valleyInstanceRef.current = null;
     };

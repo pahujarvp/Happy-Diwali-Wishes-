@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { Flame, Sparkles, Share2, Check, X, Heart, MessageCircle, Copy, User } from 'lucide-react';
-import confetti from 'canvas-confetti';
-import { audioStore } from '../valley/audio';
+import { Flame, Sparkles, Share2, Check, X, MessageCircle, Copy, User } from 'lucide-react';
 
 interface DiyaWishesModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onDiyaLit: () => void;
+  onDiyaLit?: () => void;
   senderName: string;
   onUpdateSenderName: (name: string) => void;
 }
@@ -14,12 +12,9 @@ interface DiyaWishesModalProps {
 export const DiyaWishesModal: React.FC<DiyaWishesModalProps> = ({
   isOpen,
   onClose,
-  onDiyaLit,
   senderName,
   onUpdateSenderName,
 }) => {
-  const [diyaCount, setDiyaCount] = useState(108);
-  const [isLit, setIsLit] = useState(false);
   const [copied, setCopied] = useState(false);
   const [customName, setCustomName] = useState(senderName);
 
@@ -51,20 +46,6 @@ export const DiyaWishesModal: React.FC<DiyaWishesModalProps> = ({
   };
 
   const shareText = `🪔 Happy Diwali Wishes! 🪔\n\nMay the divine glow of diyas illuminate your life with endless happiness, good health, peace, and prosperity.\n\nWishing you and your family a sparkling and joyful Diwali! ✨\n\nWarm regards,\n${activeName}\n\n🌟 Experience the Magic of Diwali in 3D! 🌟\n👇 Open your special 3D Diwali Night Valley Greeting here:\n\n${getPersonalizedUrl()}`;
-
-  const handleLightDiya = () => {
-    setIsLit(true);
-    setDiyaCount((c) => c + 1);
-    audioStore.playDiyaIgnitionSound();
-    onDiyaLit();
-
-    confetti({
-      particleCount: 50,
-      spread: 70,
-      origin: { y: 0.65 },
-      colors: ['#fbbf24', '#f59e0b', '#f43f5e', '#fef08a', '#ffffff'],
-    });
-  };
 
   const handleCopy = async () => {
     try {
@@ -98,49 +79,49 @@ export const DiyaWishesModal: React.FC<DiyaWishesModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md transition-all duration-300 pointer-events-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md transition-all duration-300 pointer-events-auto"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-md bg-[#0b0a14] border border-amber-400/30 rounded-t-3xl sm:rounded-3xl p-6 pb-8 shadow-2xl text-[#f5efe2] overflow-hidden max-h-[92vh] overflow-y-auto"
+        className="relative w-full max-w-[94vw] sm:max-w-md bg-[#0b0a14] border border-amber-400/35 rounded-3xl p-5 sm:p-6 pb-6 shadow-2xl text-[#f5efe2] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Decorative golden ambient glows */}
-        <div className="absolute -top-24 -left-24 w-52 h-52 bg-amber-500/25 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -right-24 w-52 h-52 bg-rose-500/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-20 -left-20 w-48 h-48 bg-amber-500/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-20 -right-20 w-48 h-48 bg-rose-500/15 rounded-full blur-3xl pointer-events-none" />
 
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 transition-colors"
+          className="absolute top-3.5 right-3.5 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 transition-colors"
           aria-label="Close"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4" />
         </button>
 
         {/* Content */}
-        <div className="flex flex-col items-center text-center mt-1">
-          <div className="relative mb-2 flex items-center justify-center">
-            <div className="w-14 h-14 rounded-full bg-amber-500/15 border border-amber-400/35 flex items-center justify-center">
-              <Flame className="w-7 h-7 text-amber-400 diya-flame" />
+        <div className="flex flex-col items-center text-center">
+          <div className="relative mb-1 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full bg-amber-500/15 border border-amber-400/35 flex items-center justify-center">
+              <Flame className="w-6 h-6 text-amber-400 diya-flame" />
             </div>
-            <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-amber-300 animate-spin" style={{ animationDuration: '8s' }} />
+            <Sparkles className="absolute -top-1 -right-1 w-3.5 h-3.5 text-amber-300 animate-spin" style={{ animationDuration: '8s' }} />
           </div>
 
-          <span className="text-[10px] tracking-[0.26em] uppercase text-amber-300 font-semibold">
+          <span className="text-[10px] tracking-[0.24em] uppercase text-amber-300 font-semibold">
             Shubh Deepavali 2026
           </span>
 
-          <h2 className="font-royal text-2xl font-bold tracking-normal text-[#ffffff] mt-1">
+          <h2 className="font-royal text-xl sm:text-2xl font-bold tracking-normal text-[#ffffff] mt-0.5">
             Personalize & Share
           </h2>
 
-          <p className="text-xs text-stone-300 mt-1 max-w-xs">
+          <p className="text-[11px] sm:text-xs text-stone-300 mt-0.5 max-w-xs">
             Send this magical 3D night valley greeting to friends and family with your own name!
           </p>
 
           {/* Personalization Input Card */}
-          <div className="w-full mt-4 p-4 rounded-2xl bg-black/60 border border-amber-400/25 text-left space-y-2">
+          <div className="w-full mt-3 p-3.5 rounded-2xl bg-black/60 border border-amber-400/25 text-left space-y-1.5">
             <label className="text-[11px] font-semibold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
               <User className="w-3.5 h-3.5 text-amber-400" />
               <span>Your Name / Sender Name</span>
@@ -152,10 +133,10 @@ export const DiyaWishesModal: React.FC<DiyaWishesModalProps> = ({
                 onChange={handleNameChange}
                 placeholder="Enter your name (e.g. Rohit Pahuja)"
                 maxLength={40}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-amber-400/40 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400 text-sm text-[#ffffff] placeholder-stone-500"
+                className="w-full px-3 py-2 rounded-xl bg-white/5 border border-amber-400/40 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400 text-xs sm:text-sm text-[#ffffff] placeholder-stone-500"
               />
             </div>
-            <p className="text-[11px] text-stone-400">
+            <p className="text-[10px] sm:text-[11px] text-stone-400">
               Live Signature:{' '}
               <span className="font-signature text-xl text-amber-300 ml-1">
                 {activeName}
@@ -164,11 +145,11 @@ export const DiyaWishesModal: React.FC<DiyaWishesModalProps> = ({
           </div>
 
           {/* Action Sharing Buttons */}
-          <div className="w-full mt-4 space-y-2.5">
+          <div className="w-full mt-3.5 space-y-2">
             {/* WhatsApp Direct Button */}
             <button
               onClick={handleWhatsApp}
-              className="w-full py-3 px-4 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-stone-950 font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/30 transition-all active:scale-[0.98]"
+              className="w-full py-2.5 px-4 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-stone-950 font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/30 transition-all active:scale-[0.98]"
             >
               <MessageCircle className="w-4 h-4 fill-stone-950 text-stone-950" />
               <span>Share on WhatsApp</span>
@@ -201,27 +182,6 @@ export const DiyaWishesModal: React.FC<DiyaWishesModalProps> = ({
                 <Share2 className="w-3.5 h-3.5 text-amber-300" />
                 <span>More Options</span>
               </button>
-            </div>
-
-            {/* Light Diya Button */}
-            <div className="pt-2">
-              <button
-                onClick={handleLightDiya}
-                disabled={isLit}
-                className={`w-full py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
-                  isLit
-                    ? 'bg-amber-400/20 text-amber-200 border border-amber-400/40 cursor-default'
-                    : 'bg-gradient-to-r from-amber-500 to-amber-600 text-stone-950 hover:from-amber-400 hover:to-amber-500 active:scale-[0.98]'
-                }`}
-              >
-                <Flame className={`w-3.5 h-3.5 ${isLit ? 'text-amber-400' : 'text-stone-950'}`} />
-                <span>{isLit ? 'Your Diya is Glowing in the Valley!' : 'Light a Sacred Diya'}</span>
-              </button>
-            </div>
-
-            <div className="flex items-center justify-center gap-1.5 text-[11px] text-amber-200/60 pt-1">
-              <Heart className="w-3 h-3 text-rose-400 fill-rose-400" />
-              <span>{diyaCount} Diyas lit by visitors worldwide</span>
             </div>
           </div>
         </div>

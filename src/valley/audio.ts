@@ -37,13 +37,14 @@ class ValleyAudio {
   public startBackgroundMusic() {
     if (!this.bgMusic || this.userExplicitlyMuted) return;
 
+    this.isMuted = false;
+    this.bgMusic.volume = 0.75;
     this.bgMusic.play().then(() => {
       this.isPlayingMusic = true;
-      this.isMuted = false;
     }).catch(() => {
-      // Browser blocked unmuted autoplay before gesture
+      // If browser blocked unmuted autoplay before gesture, keep unmuted intent;
+      // enableOnUserGesture will immediately play on first touch.
       this.isPlayingMusic = false;
-      this.isMuted = true;
     });
   }
 
@@ -51,10 +52,11 @@ class ValleyAudio {
     if (typeof window === 'undefined') return;
 
     const resumeAudio = () => {
-      if (this.bgMusic && !this.isPlayingMusic && !this.userExplicitlyMuted) {
+      if (this.bgMusic && !this.userExplicitlyMuted) {
+        this.isMuted = false;
+        this.bgMusic.volume = 0.75;
         this.bgMusic.play().then(() => {
           this.isPlayingMusic = true;
-          this.isMuted = false;
         }).catch(() => {});
       }
       if (this.ctx && this.ctx.state === 'suspended') {
@@ -68,9 +70,12 @@ class ValleyAudio {
   }
 
   public toggleMute(): boolean {
-    if (!this.bgMusic) return this.isMuted;
+    if (!this.bgMusic) {
+      this.isMuted = !this.isMuted;
+      return this.isMuted;
+    }
 
-    if (this.isPlayingMusic && !this.bgMusic.paused && this.bgMusic.volume > 0) {
+    if (!this.isMuted) {
       // Mute / Pause
       this.bgMusic.pause();
       this.isPlayingMusic = false;
@@ -79,10 +84,10 @@ class ValleyAudio {
     } else {
       // Unmute / Play
       this.userExplicitlyMuted = false;
+      this.isMuted = false;
       this.bgMusic.volume = 0.75;
       this.bgMusic.play().then(() => {
         this.isPlayingMusic = true;
-        this.isMuted = false;
       }).catch(() => {});
     }
 
@@ -196,7 +201,7 @@ class ValleyAudio {
   }
 
   public get muted(): boolean {
-    return this.isMuted || !this.isPlayingMusic;
+    return this.isMuted;
   }
 
   public dispose() {
