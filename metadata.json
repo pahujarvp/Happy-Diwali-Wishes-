@@ -1,0 +1,6 @@
+{
+  "name": "Happy Diwali — Rohit Pahuja",
+  "description": "An interactive night flower valley celebration wishing you a joyous and prosperous Happy Diwali with warm regards from Rohit Pahuja.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
